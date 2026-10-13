@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DreH – Book a hand-drawn portrait</title>
+<meta name="description" content="Hand-drawn graphite portraits by DreH. Hold a slot, follow your portrait, and give one as a gift.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%E2%9C%8F%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Reenie+Beanie&family=Young+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="bar">
+  <a class="sig" href="#top" aria-label="DreH, back to top">DreH</a>
+  <nav aria-label="Main">
+    <a href="#slots">Slots</a>
+    <a href="#reserve">Hold a slot</a>
+    <a href="#client">Client page</a>
+    <a href="#gifts">Gifts</a>
+    <a href="#studio">Studio view</a>
+  </nav>
+  <label class="tog"><input type="checkbox" id="notes" checked> Notes for you</label>
+</header>
+
+<main id="top">
+
+<!-- 1. SLOT BOARD -->
+<section class="desk" id="slots" aria-labelledby="hh">
+  <div class="wrap">
+    <div class="preview" role="group" aria-label="Preview the page in a different state">
+      <span>Preview the page when:</span>
+      <div class="seg">
+        <input class="vh" type="radio" name="mode" id="m1" value="open" checked><label for="m1">Slots are open</label>
+        <input class="vh" type="radio" name="mode" id="m2" value="sold"><label for="m2">Fully booked</label>
+      </div>
+    </div>
+
+    <h1 id="hh">4 portrait slots are open.</h1>
+    <p class="sub" id="hs">DreH draws a few portraits at a time, so each one gets his full attention. Hold a slot with a deposit, then follow your portrait on your own page.</p>
+
+    <div class="heroact" id="act-open">
+      <a class="btn" href="#reserve">Hold a slot</a>
+      <a class="textlink" href="#client">See what your client page looks like</a>
+    </div>
+
+    <div id="act-sold" hidden>
+      <div class="count" id="count" aria-live="off">
+        <div><b id="cd">0</b><span>days</span></div>
+        <div><b id="ch">00</b><span>hours</span></div>
+        <div><b id="cm">00</b><span>minutes</span></div>
+        <div><b id="cs">00</b><span>seconds</span></div>
+      </div>
+      <form class="wait" id="waitform" novalidate>
+        <input type="email" id="waitemail" placeholder="Your email" aria-label="Email for the waitlist" autocomplete="email">
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+      <p class="err" id="waiterr" role="alert" style="color:var(--bad)"></p>
+      <div class="wait-ok" id="waitok" hidden></div>
+    </div>
+
+    <div class="board" id="board" aria-label="Slots for this round"></div>
+    <p class="note legend" id="legend">Click a free slot to hold it.</p>
+
+    <div class="annot"><b>For you:</b> A visible queue and a countdown help people decide now, instead of "maybe later" getting lost in a DM thread. And when you sell out, the waitlist fills your next round for you.</div>
+  </div>
+</section>
+
+<!-- 2. HOLD A SLOT -->
+<section class="sec" id="reserve" aria-labelledby="h-res">
+  <div class="wrap">
+    <h2 id="h-res">Hold a slot in four steps</h2>
+    <p class="lead">The site checks the photo, quotes the price, and takes the deposit before DreH picks up a pencil.</p>
+
+    <div class="sheet flow" id="flow">
+      <ol class="stepper" id="stepper">
+        <li class="on"><i>1</i>Photo</li>
+        <li><i>2</i>Size and people</li>
+        <li><i>3</i>Deposit</li>
+        <li><i>4</i>Confirmed</li>
+      </ol>
+
+      <!-- step 1 -->
+      <div class="panel on" data-p="1">
+        <div class="two">
+          <div>
+            <span class="lbl">Upload the photo to draw from</span>
+            <div class="drop" id="drop">
+              <div class="thumb" id="thumb"><span>no photo yet</span></div>
+              <div>
+                <p>Drop a photo here, or choose one. The site checks it straight away.</p>
+                <input class="vh" type="file" id="file" accept="image/*">
+                <div class="row">
+                  <label for="file" class="btn ghost" id="filebtn" style="cursor:pointer">Choose a photo</label>
+                  <button type="button" class="btn ghost" id="sample">Use a sample</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span class="lbl">Photo check</span>
+            <ul class="checks" id="checks" aria-live="polite">
+              <li><span class="ic">·</span><div><b>Waiting for a photo</b><small>Resolution, lighting and sharpness are checked here.</small></div></li>
+            </ul>
+            <div class="verdict" id="verdict" hidden></div>
+          </div>
+        </div>
+        <div class="nav"><button class="btn" type="button" id="to2" disabled>Continue</button><span class="fine" id="slotlabel">Slot 3 selected</span></div>
+      </div>
+
+      <!-- step 2 -->
+      <div class="panel" data-p="2">
+        <div class="two">
+          <div>
+            <div class="field">
+              <span class="lbl" id="l-size">Size</span>
+              <div class="seg" role="radiogroup" aria-labelledby="l-size">
+                <input class="vh" type="radio" name="size" id="s1" value="90" data-w="2"><label for="s1">A5<small>15 × 21 cm</small></label>
+                <input class="vh" type="radio" name="size" id="s2" value="150" data-w="3" checked><label for="s2">A4<small>21 × 30 cm</small></label>
+                <input class="vh" type="radio" name="size" id="s3" value="240" data-w="5"><label for="s3">A3<small>30 × 42 cm</small></label>
+              </div>
+            </div>
+            <div class="field">
+              <span class="lbl" id="l-ppl">People in the portrait</span>
+              <div class="seg" role="radiogroup" aria-labelledby="l-ppl">
+                <input class="vh" type="radio" name="ppl" id="p1" value="1" checked><label for="p1">1 person</label>
+                <input class="vh" type="radio" name="ppl" id="p2" value="2"><label for="p2">2 people</label>
+                <input class="vh" type="radio" name="ppl" id="p3" value="3"><label for="p3">3 people</label>
+              </div>
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <label class="lbl" for="msg">Anything DreH should know?</label>
+              <textarea id="msg" placeholder="The mood, the person, what it's for."></textarea>
+            </div>
+          </div>
+          <aside class="quote" aria-label="Your quote">
+            <div class="note">Your quote</div>
+            <div class="est" id="price">$150</div>
+            <div class="fine">one portrait, drawn by hand</div>
+            <dl>
+              <dt>Deposit now</dt><dd id="q-dep">$45</dd>
+              <dt>Balance at reveal</dt><dd id="q-bal">$105</dd>
+              <dt>Ready in</dt><dd id="q-eta">about 3 weeks</dd>
+            </dl>
+          </aside>
+        </div>
+        <div class="nav"><button class="btn ghost" type="button" data-back="1">Back</button><button class="btn" type="button" id="to3">Continue</button></div>
+      </div>
+
+      <!-- step 3 -->
+      <div class="panel" data-p="3">
+        <div class="two">
+          <div>
+            <div class="row2 field">
+              <div><label class="lbl" for="cname">Your name</label><input type="text" id="cname" autocomplete="given-name"></div>
+              <div><label class="lbl" for="cemail">Email</label><input type="email" id="cemail" autocomplete="email"></div>
+            </div>
+            <label style="display:flex;gap:10px;align-items:flex-start;font-size:.95rem;cursor:pointer">
+              <input type="checkbox" id="agree" style="width:20px;height:20px;margin:2px 0 0;accent-color:var(--mono);flex:none">
+              <span>I understand the deposit holds my slot and is not refundable once drawing starts.</span>
+            </label>
+            <p class="err" id="payerr" role="alert"></p>
+          </div>
+          <aside class="quote" aria-label="Payment summary">
+            <div class="note">To pay now</div>
+            <div class="est" id="dep2">$45</div>
+            <dl>
+              <dt>Slot</dt><dd id="pay-slot">3</dd>
+              <dt>Portrait</dt><dd id="pay-what">A4, 1 person</dd>
+              <dt>Total</dt><dd id="pay-total">$150</dd>
+              <dt class="hl">Balance at reveal</dt><dd class="hl" id="pay-bal">$105</dd>
+            </dl>
+            <p class="fine" style="margin-top:14px">Demo only. No payment is taken in this mockup.</p>
+          </aside>
+        </div>
+        <div class="nav"><button class="btn ghost" type="button" data-back="2">Back</button><button class="btn" type="button" id="pay">Pay deposit</button></div>
+      </div>
+
+      <!-- step 4 -->
+      <div class="panel" data-p="4">
+        <div class="done-big" id="done-h">Slot 3 is yours.</div>
+        <p class="lead" style="color:var(--sheet-soft)" id="done-p">DreH has your photo and your deposit. Everything about your portrait now lives on one private page.</p>
+        <div style="margin-top:20px"><span class="pill" id="done-url">dreh.art/c/…</span></div>
+        <div class="nav"><a class="btn" href="#client" id="opencp">Open my client page</a><button class="btn ghost" type="button" id="again">Start over</button></div>
+      </div>
+    </div>
+
+    <div class="sheet flow" id="soldnote" hidden>
+      <div class="done-big">This round is fully booked.</div>
+      <p class="lead" style="color:var(--sheet-soft)">Join the waitlist at the top of the page to get first pick when new slots open.</p>
+      <div class="nav"><a class="btn" href="#slots">Go to the waitlist</a></div>
+    </div>
+
+    <div class="annot"><b>For you:</b> Price questions, photo quality and the deposit are sorted before you ever see a message. No chasing people for a better photo, and no one booking a slot and vanishing.</div>
+  </div>
+</section>
+
+<!-- 3. CLIENT PAGE + REVEAL -->
+<section class="sec" id="client" aria-labelledby="h-cl" style="padding-top:0">
+  <div class="wrap">
+    <h2 id="h-cl">One private link for every portrait</h2>
+    <p class="lead">Each client gets their own page with progress photos, messages, payment status, and, at the end, the reveal. Try the stages and the tabs below.</p>
+
+    <div class="browser">
+      <div class="chrome"><div class="dots" aria-hidden="true"><i></i><i></i><i></i></div><div class="url" id="cpurl">dreh.art/c/amara-x7k2</div></div>
+      <div class="cp">
+        <div class="cp-head">
+          <h3 id="cp-title">Amara's portrait</h3>
+          <div class="chips">
+            <span class="chip ok">Photo approved</span>
+            <span class="chip ok" id="chip-dep">Deposit paid $45</span>
+            <span class="chip wait" id="chip-bal">Balance $105 due at reveal</span>
+          </div>
+        </div>
+
+        <div class="tabs" role="tablist" aria-label="Client page sections">
+          <button role="tab" id="tab1" aria-selected="true" aria-controls="tp1">In progress</button>
+          <button role="tab" id="tab2" aria-selected="false" aria-controls="tp2" tabindex="-1">The reveal</button>
+        </div>
+
+        <div class="tabpanel on" id="tp1" role="tabpanel" aria-labelledby="tab1">
+          <div class="cp-grid">
+            <div>
+              <div class="stagebtns" role="group" aria-label="Progress stage">
+                <button type="button" data-s="0" aria-pressed="true">Outline</button>
+                <button type="button" data-s="1" aria-pressed="false">Mid-tones</button>
+                <button type="button" data-s="2" aria-pressed="false">Hatching</button>
+                <button type="button" data-s="3" aria-pressed="false">Final details</button>
+              </div>
+              <div class="viewer" id="viewer"><img src="images/portrait-1.png" alt="Work-in-progress photo of the drawing"></div>
+              <div class="bar-wrap">
+                <div id="eta">Estimated delivery: …</div>
+                <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+              </div>
+              <p class="note" style="margin-top:10px">Stand-in: your real progress photos go here.</p>
+            </div>
+            <div>
+              <ul class="feed" id="feed" aria-live="polite"></ul>
+              <div class="sendrow">
+                <label class="vh" for="cmsg">Message DreH</label>
+                <textarea id="cmsg" placeholder="Ask a question or request a change"></textarea>
+                <button class="btn" type="button" id="csend">Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tabpanel" id="tp2" role="tabpanel" aria-labelledby="tab2">
+          <div class="reveal">
+            <div style="position:relative">
+              <div class="cmp" id="rcmp">
+                <img src="images/portrait-1-photo.png" alt="The reference photo">
+                <img class="top" src="images/portrait-1.png" alt="The finished drawing">
+                <div class="wm" id="wm"></div>
+                <div class="handle"></div>
+                <span class="lab l">your photo</span><span class="lab r">your portrait</span>
+                <input type="range" min="0" max="100" value="55" aria-label="Compare your photo and your portrait">
+              </div>
+            </div>
+            <div>
+              <h3>It's finished.</h3>
+              <p style="margin-top:10px;color:var(--sheet-soft)" id="rtext">Drag across to compare your photo with the portrait. The full-resolution reveal unlocks when the balance is paid.</p>
+              <div class="paybox" id="paybox">
+                <div id="paystate">Balance due: <b id="balamt">$105</b></div>
+                <div class="actions"><button class="btn" type="button" id="paybal">Pay balance and unlock</button></div>
+              </div>
+              <div class="actions">
+                <button class="btn ghost" type="button" id="sh-copy" disabled>Copy reveal link</button>
+                <button class="btn ghost" type="button" id="sh-fb" disabled>Post to Facebook</button>
+                <button class="btn ghost" type="button" id="sh-dl" disabled>Download high-res</button>
+              </div>
+              <p class="toast" id="toast" role="status"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="annot" style="margin-right:20px"><b>For you:</b> Clients stop asking "how's mine going?" because they can see it. At the end the balance is paid before the full-resolution file leaves your hands, and the share buttons turn every happy client into an ad for your next one.</div>
+  </div>
+</section>
+
+<!-- 4. GIFTS -->
+<section class="sec" id="gifts" aria-labelledby="h-gift" style="padding-top:0">
+  <div class="wrap">
+    <h2 id="h-gift">Give a portrait as a gift</h2>
+    <p class="lead">Buy a voucher for someone to redeem, or arrange a surprise with a photo you choose. The card arrives on the day you pick.</p>
+    <div class="gift-grid">
+      <div class="gift-form">
+        <div class="field">
+          <span class="lbl" id="l-gt">Type of gift</span>
+          <div class="seg" role="radiogroup" aria-labelledby="l-gt">
+            <input class="vh" type="radio" name="gt" id="g1" value="voucher" checked><label for="g1">Voucher<small>They choose the photo</small></label>
+            <input class="vh" type="radio" name="gt" id="g2" value="surprise"><label for="g2">Surprise<small>You choose the photo</small></label>
+          </div>
+        </div>
+        <div class="field">
+          <span class="lbl" id="l-ga">Size</span>
+          <div class="seg" role="radiogroup" aria-labelledby="l-ga">
+            <input class="vh" type="radio" name="ga" id="a1" value="90|A5"><label for="a1">A5<small>$90</small></label>
+            <input class="vh" type="radio" name="ga" id="a2" value="150|A4" checked><label for="a2">A4<small>$150</small></label>
+            <input class="vh" type="radio" name="ga" id="a3" value="240|A3"><label for="a3">A3<small>$240</small></label>
+          </div>
+        </div>
+        <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div><label class="lbl" for="gto">For</label><input type="text" id="gto" value="Mum"></div>
+          <div><label class="lbl" for="gfrom">From</label><input type="text" id="gfrom" value="Tobi"></div>
+        </div>
+        <div class="field">
+          <label class="lbl" for="gmsg">Your message</label>
+          <textarea id="gmsg">Happy birthday. I thought this belonged on your wall.</textarea>
+        </div>
+        <div class="field">
+          <label class="lbl" for="gdate">Deliver the card on</label>
+          <input type="date" id="gdate">
+        </div>
+        <div class="gift-total" id="gtotal">Total today: $150</div>
+        <button class="btn" type="button" id="gbuy">Buy this gift</button>
+        <div class="gift-ok" id="gok" hidden role="status"></div>
+      </div>
+      <div>
+        <div class="gcard" id="gcard" aria-live="polite">
+          <div class="kicker" id="gk">A gift from Tobi</div>
+          <h3 id="gh">A hand-drawn portrait, for Mum</h3>
+          <div class="gm" id="gm"></div>
+          <div class="code"><span id="gnote">Good for one A4 portrait. Redeem at dreh.art/gift</span><b id="gcode">DREH-0000</b></div>
+        </div>
+        <p class="note" style="margin-top:20px;text-align:center">Live preview of the card they receive.</p>
+        <div class="annot" style="margin-left:auto"><b>For you:</b> A gift buyer doesn't need to follow you. They find you through a friend's post or a search, and pay before you draw anything. That's new customers and new cash, not just new fans.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. STUDIO VIEW -->
+<section class="sec" id="studio" aria-labelledby="h-st" style="padding-top:0">
+  <div class="wrap">
+    <h2 id="h-st">What you see</h2>
+    <p class="lead">Your side of the same system: every request, its photo check, its deposit, and when it's due. New bookings from the demo above show up here.</p>
+    <div class="sheet studio">
+      <div class="stats" id="stats"></div>
+      <div class="tablewrap">
+        <table>
+          <caption class="vh">Commission queue</caption>
+          <thead><tr><th scope="col">Client</th><th scope="col">Portrait</th><th scope="col">Stage</th><th scope="col">Photo</th><th scope="col">Deposit</th><th scope="col">Due</th><th scope="col">Action</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <ul class="benefits">
+        <li><b>Questions answered early</b>Price, size and timing are on the page, so they don't arrive as DMs.</li>
+        <li><b>Photos checked first</b>Blurry or tiny photos are flagged before they cost you a day.</li>
+        <li><b>Paid before you start</b>The deposit comes in with the booking, and the balance with the reveal.</li>
+        <li><b>A queue in order</b>Every job, its stage and its due date, in one list.</li>
+      </ul>
+    </div>
+    <div class="annot"><b>For you:</b> This is the part that saves you time. Facebook DMs don't keep a queue, check a photo, or hold a deposit.</div>
+  </div>
+</section>
+
+<!-- Facebook stays the front door -->
+<section class="sec" id="facebook" aria-labelledby="h-fb" style="padding-top:0">
+  <div class="wrap">
+    <h2 id="h-fb">Facebook stays the front door</h2>
+    <div class="fb">
+      <p class="lead" style="margin-top:0">You keep posting where your audience already is. The site doesn't replace Facebook. It handles everything that happens after someone says "I want one."</p>
+      <ol>
+        <li><b>Add a "Book a portrait" button</b><span>One button on your Facebook page, linking to the slot board.</span></li>
+        <li><b>End posts with the slot count</b><span>"3 slots left this round" in every caption, with the link.</span></li>
+        <li><b>Post each reveal</b><span>Clients share their reveal page, and you repost the best ones.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="big">DreH</div>
+      <p>Hand-drawn graphite portraits. Follow the daily work on <a href="https://web.facebook.com/profile.php?id=61550500407107">Facebook</a>.</p>
+    </div>
+    <p>Concept mockup made for DreH. Names, prices, dates and the queue are placeholders. Every drawing shown is DreH's own work.</p>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
